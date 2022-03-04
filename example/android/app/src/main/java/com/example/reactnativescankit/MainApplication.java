@@ -8,6 +8,8 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.soloader.SoLoader;
+
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.reactnativescankit.ScanKitPackage;
@@ -48,6 +50,12 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager()); // Remove this line if you don't want Flipper enabled
   }
+
+  /**
+   * Huawei hms scan init
+   *
+   * @param applicationContext
+   * */
 
   /**
    * Loads Flipper in React Native templates.

@@ -2,21 +2,29 @@ buildscript {
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
   def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['ScanKit_kotlinVersion']
 
+  def huawei_version = project.properties['ScanKit_huaweiSdkVersion']
+
   repositories {
     google()
     mavenCentral()
     jcenter()
+    // 配置HMS Core SDK的Maven仓地址
+    maven { url 'https://developer.huawei.com/repo/' }
   }
 
   dependencies {
     classpath 'com.android.tools.build:gradle:3.2.1'
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    // 增加agcp插件配置
+    classpath "com.huawei.agconnect:agcp:$huawei_version"
   }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.huawei.agconnect'
+
 
 def getExtOrDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['ScanKit_' + name]
@@ -29,13 +37,13 @@ def getExtOrIntegerDefault(name) {
 android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
   defaultConfig {
-    minSdkVersion 16
+    minSdkVersion 19
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     versionCode 1
-    versionName "1.0"
-    
+    versionName "1.0.0"
+    resConfigs "en", "zh-rCN"
   }
-  
+
   buildTypes {
     release {
       minifyEnabled false
@@ -54,6 +62,7 @@ repositories {
   mavenCentral()
   jcenter()
   google()
+  maven { url 'https://developer.huawei.com/repo/' }
 
   def found = false
   def defaultDir = null
@@ -122,9 +131,11 @@ repositories {
 }
 
 def kotlin_version = getExtOrDefault('kotlinVersion')
+def huawei_scan_version = project.properties['ScanKit_huaweiScanversion']
 
 dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "com.huawei.hms:scan:$huawei_scan_version"
 }
